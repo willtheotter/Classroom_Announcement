@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
+    android:background="@drawable/radial_gradient"
     tools:context=".CreateAnnouncementPage">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:background="?attr/colorPrimary">
+        android:background="#003366">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -35,19 +36,22 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-
             <!-- Title Input Field -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/titleInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Title">
+                android:hint="Title"
+                app:boxBackgroundColor="@android:color/white"
+                app:boxStrokeColor="#003366"
+                app:hintTextColor="#80003666">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/announcementTitleInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="#001a33"
                     android:inputType="textCapSentences" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -59,19 +63,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Content">
+                android:hint="Content"
+                app:boxBackgroundColor="@android:color/white"
+                app:boxStrokeColor="#003366"
+                app:hintTextColor="#80003666">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/announcementBodyInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="#001a33"
                     android:gravity="top"
                     android:inputType="textMultiLine"
                     android:minLines="5" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Post Button -->
+            <Button
+                android:id="@+id/postButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Post Announcement"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:backgroundTint="#003366"
+                android:paddingVertical="14dp"/>
+
         </LinearLayout>
     </ScrollView>
 
+    <!-- Option 1: Remove FAB completely -->
+    <!-- Option 2: Use standard Material icon (uncomment below) -->
+    <!--
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/uploadImageFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add"
+        android:contentDescription="Upload image"
+        android:backgroundTint="#003366"
+        android:tint="@android:color/white"/>
+    -->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

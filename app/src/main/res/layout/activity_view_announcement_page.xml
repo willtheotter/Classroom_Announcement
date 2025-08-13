@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground"
+    android:background="@drawable/radial_gradient"
     tools:context=".ViewAnnouncementPage">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#003366">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:title="Announcement View" />
+            app:title="Announcement View"
+            app:titleTextColor="@android:color/white"
+            app:navigationIconTint="@android:color/white"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -31,7 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@android:color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,55 +44,63 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
+                <!-- Announcement Title -->
                 <TextView
                     android:id="@+id/announcementTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceHeadline5"
+                    android:textColor="#003366"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     tools:text="Important Class Update" />
 
+                <!-- Announcement Date -->
                 <TextView
                     android:id="@+id/announcementDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textAppearance="?attr/textAppearanceCaption"
-                    android:textColor="?android:attr/textColorSecondary"
+                    android:textColor="#80003666"
+                    android:textSize="14sp"
                     tools:text="August 05, 2025" />
 
+                <!-- Divider -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    android:background="?android:attr/dividerHorizontal" />
+                    android:background="#11003666" />
 
+                <!-- Announcement Content -->
                 <TextView
                     android:id="@+id/announcementContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:lineSpacingExtra="5dp"
-                    android:textAppearance="?attr/textAppearanceBody1"
+                    android:textColor="#001a33"
                     android:textSize="16sp"
+                    android:lineSpacingMultiplier="1.2"
                     tools:text="This is the full text of the announcement. It can be multiple paragraphs long and will wrap as needed, providing all the necessary details for the students." />
 
+                <!-- Divider -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    android:background="?android:attr/dividerHorizontal" />
+                    android:background="#11003666" />
 
+                <!-- Inspirational Quote -->
                 <TextView
                     android:id="@+id/inspirationalQuote"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:lineSpacingExtra="5dp"
+                    android:textColor="#80003666"
+                    android:textSize="14sp"
+                    android:lineSpacingMultiplier="1.3"
                     android:textAlignment="center"
-                    android:textAppearance="?attr/textAppearanceBody2"
-                    android:textColor="?android:attr/textColorSecondary"
+                    android:fontFamily="sans-serif-light"
                     android:visibility="gone"
                     tools:text="&quot;This is where the quote will appear&quot;\n\n- quote provided by quotable.io, retrieved via retrofit"
                     tools:visibility="visible" />
