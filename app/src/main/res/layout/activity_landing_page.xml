@@ -95,10 +95,22 @@
             android:padding="8dp"/>
     </androidx.cardview.widget.CardView>
 
-    <!-- Floating Action Button -->
+    <!-- Floating Action Buttons -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/adminDashboardButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_admin"
+            android:contentDescription="Admin Dashboard"
+            android:backgroundTint="#003366"
+            android:tint="@android:color/white"
+            android:visibility="gone"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/goToCreateAnnouncementButton"

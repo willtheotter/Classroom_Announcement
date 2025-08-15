@@ -1,51 +1,46 @@
 package com.example.classroomannouncement.Database.Entities;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-/**
- * This class defines a User for our database.
- * Room will create a table called "users" based on this class.
- */
 @Entity(tableName = "users")
 public class User {
-
-    /**
-     * id: A unique number for each user (auto-generated)
-     */
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    private int id;
 
-    /**
-     * fullName: The user's full name
-     */
-    public String fullName;
+    private String name;
+    private String email;
+    private String password;
 
-    /**
-     * email: The user's email (used to log in)
-     */
-    public String email;
+    @ColumnInfo(name = "is_admin")
+    private boolean isAdmin;
 
-    /**
-     * password: The user's password
-     */
-    public String password;
-
-    /**
-     * isAdmin: true if the user is a teacher/admin, false if a student
-     */
-    public boolean isAdmin;
-
-    // Constructor
-    public User(String fullName, String email, String password, boolean isAdmin) {
-        this.fullName = fullName;
+    // Primary constructor (used by Room)
+    public User(int id, String name, String email, String password, boolean isAdmin) {
+        this.id = id;
+        this.name = name;
         this.email = email;
         this.password = password;
         this.isAdmin = isAdmin;
     }
 
-    public String getName() {
-        return fullName;
+    // Secondary constructor (ignored by Room)
+    @Ignore
+    public User(String name, String email, String password, boolean isAdmin) {
+        this(0, name, email, password, isAdmin); // ID will be auto-generated
     }
 
+    // Getters and Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+    public boolean isAdmin() { return isAdmin; }
+    public void setAdmin(boolean admin) { isAdmin = admin; }
 }
