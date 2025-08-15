@@ -8,58 +8,105 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.classroomannouncement.Database.Entities.User;
-import com.example.classroomannouncement.Database.UserRepo;
+import com.example.classroomannouncement.Database.Repositories.UserRepo;
 
-/**
- * This screen lets the user update their profile info.
- */
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 public class EditProfilePage extends AppCompatActivity {
 
-    private EditText nameEditText, passwordEditText;
+    private EditText nameEditText, currentPasswordEditText,
+            newPasswordEditText, confirmPasswordEditText;
     private Button saveButton;
-
-    private User currentUser;
     private UserRepo userRepo;
+    private final Executor executor = Executors.newSingleThreadExecutor();
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile); // Connect layout XML file
+        setContentView(R.layout.activity_edit_profile);
 
-        // Link input fields and button to layout components
+        // Initialize views
         nameEditText = findViewById(R.id.nameEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
+        currentPasswordEditText = findViewById(R.id.currentPasswordEditText);
+        newPasswordEditText = findViewById(R.id.newPasswordEditText);
+        confirmPasswordEditText = findViewById(R.id.confirmPasswordEditText);
         saveButton = findViewById(R.id.saveButton);
 
-        // Set up helper class for DB operations
+        // Initialize UserRepo
         userRepo = new UserRepo(this);
 
-        // Get user data passed from SettingsPage
-        currentUser = (User) getIntent().getSerializableExtra("user");
+        // Get current user data (you'll need to pass this from previous activity)
+        String userEmail = getIntent().getStringExtra("user_email");
+        if (userEmail != null) {
+            loadUserData(userEmail);
+        } else {
+            Toast.makeText(this, "User not identified", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
-        // Fill the input boxes with current values
-        nameEditText.setText(currentUser.fullName);
-        passwordEditText.setText(currentUser.password);
+        saveButton.setOnClickListener(v -> saveProfileChanges());
+    }
 
-        // Save updated info when button is clicked
-        saveButton.setOnClickListener(v -> {
-            String newName = nameEditText.getText().toString().trim();
-            String newPassword = passwordEditText.getText().toString().trim();
+    private void loadUserData(String email) {
+        executor.execute(() -> {
+            currentUser = userRepo.getUserByEmail(email);
+            runOnUiThread(() -> {
+                if (currentUser != null) {
+                    nameEditText.setText(currentUser.getName());
+                } else {
+                    Toast.makeText(this, "Failed to load user data", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
+        });
+    }
 
-            if (newName.isEmpty() || newPassword.isEmpty()) {
-                Toast.makeText(this, "Please enter both name and password", Toast.LENGTH_SHORT).show();
+    private void saveProfileChanges() {
+        String newName = nameEditText.getText().toString().trim();
+        String currentPassword = currentPasswordEditText.getText().toString().trim();
+        String newPassword = newPasswordEditText.getText().toString().trim();
+        String confirmPassword = confirmPasswordEditText.getText().toString().trim();
+
+        // Validate inputs
+        if (newName.isEmpty()) {
+            nameEditText.setError("Name cannot be empty");
+            return;
+        }
+
+        if (currentPassword.isEmpty()) {
+            currentPasswordEditText.setError("Enter current password");
+            return;
+        }
+
+        if (!currentPassword.equals(currentUser.getPassword())) {
+            currentPasswordEditText.setError("Incorrect password");
+            return;
+        }
+
+        if (!newPassword.isEmpty()) {
+            if (newPassword.length() < 6) {
+                newPasswordEditText.setError("Password must be at least 6 characters");
                 return;
             }
 
-            // Update user object
-            currentUser.fullName = newName;
-            currentUser.password = newPassword;
+            if (!newPassword.equals(confirmPassword)) {
+                confirmPasswordEditText.setError("Passwords don't match");
+                return;
+            }
+            currentUser.setPassword(newPassword);
+        }
 
-            // Save changes to database
+        currentUser.setName(newName);
+
+        executor.execute(() -> {
             userRepo.updateUser(currentUser);
-
-            Toast.makeText(this, "Profile updated!", Toast.LENGTH_SHORT).show();
-            finish(); // Close and return to SettingsPage
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
+                finish();
+            });
         });
     }
 }

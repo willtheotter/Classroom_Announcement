@@ -21,26 +21,41 @@ public class StudentHomePage extends AppCompatActivity {
     // Constants for intent extras
     public static final String EXTRA_FULL_NAME = "fullName";
     public static final String EXTRA_ROLE = "roleLabel";
+    public static final String EXTRA_EMAIL = "user_email";
 
-    private AnnouncementViewModel announcementViewModel;
-    private AnnouncementAdapter announcementAdapter;
+    // UI Components
     private TextView welcomeText, roleText;
+    private ImageButton settingsButton, editProfileButton;
+    private RecyclerView announcementsRecyclerView;
+
+    // Adapter and ViewModel
+    private AnnouncementAdapter announcementAdapter;
+    private AnnouncementViewModel announcementViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_home);
 
-        // Initialize views
+        initializeViews();
+        setupUserInfo();
+        setupRecyclerView();
+        setupClickListeners();
+    }
+
+    private void initializeViews() {
         welcomeText = findViewById(R.id.studentWelcomeText);
         roleText = findViewById(R.id.roleText);
-        RecyclerView announcementsRecyclerView = findViewById(R.id.announcementsRecyclerView);
-        ImageButton settingsButton = findViewById(R.id.settingsButton);
-        ImageButton editProfileButton = findViewById(R.id.editProfileButton);
+        announcementsRecyclerView = findViewById(R.id.announcementsRecyclerView);
+        settingsButton = findViewById(R.id.settingsButton);
+        editProfileButton = findViewById(R.id.editProfileButton);
+    }
 
-        // Get user data from intent with null checks
-        String fullName = getIntent().getStringExtra(EXTRA_FULL_NAME);
-        String role = getIntent().getStringExtra(EXTRA_ROLE);
+    private void setupUserInfo() {
+        Intent intent = getIntent();
+        String fullName = intent.getStringExtra(EXTRA_FULL_NAME);
+        String role = intent.getStringExtra(EXTRA_ROLE);
+        String email = intent.getStringExtra(EXTRA_EMAIL);
 
         // Set default values if null
         if (fullName == null || fullName.isEmpty()) {
@@ -51,21 +66,13 @@ public class StudentHomePage extends AppCompatActivity {
             role = getString(R.string.default_role);
         }
 
-        // Set welcome message with full name
         welcomeText.setText(getString(R.string.welcome_message, fullName));
         roleText.setText(getString(R.string.logged_in_as, role));
+    }
 
-        // Rest of your onCreate code remains the same...
-        settingsButton.setOnClickListener(v -> {
-            startActivity(new Intent(this, SettingsPage.class));
-        });
-
-        editProfileButton.setOnClickListener(v -> {
-            startActivity(new Intent(this, EditProfilePage.class));
-        });
-
-        announcementsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    private void setupRecyclerView() {
         announcementAdapter = new AnnouncementAdapter(new ArrayList<>(), false);
+        announcementsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         announcementsRecyclerView.setAdapter(announcementAdapter);
 
         announcementViewModel = new ViewModelProvider(this).get(AnnouncementViewModel.class);
@@ -76,15 +83,34 @@ public class StudentHomePage extends AppCompatActivity {
         announcementAdapter.setOnItemClickListener(new AnnouncementAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Announcement announcement) {
-                Intent intent = new Intent(StudentHomePage.this, ViewAnnouncementPage.class);
-                intent.putExtra("announcement_id", announcement.getId());
-                startActivity(intent);
+                navigateToAnnouncementDetails(announcement);
             }
 
             @Override
             public void onDeleteClick(Announcement announcement) {
-                // Not needed for student view
+                // Empty implementation for student view
             }
         });
+    }
+
+    private void setupClickListeners() {
+        settingsButton.setOnClickListener(v -> navigateToSettings());
+        editProfileButton.setOnClickListener(v -> navigateToEditProfile());
+    }
+
+    private void navigateToAnnouncementDetails(Announcement announcement) {
+        Intent intent = new Intent(this, ViewAnnouncementPage.class);
+        intent.putExtra("announcement_id", announcement.getId());
+        startActivity(intent);
+    }
+
+    private void navigateToSettings() {
+        startActivity(new Intent(this, SettingsPage.class));
+    }
+
+    private void navigateToEditProfile() {
+        Intent intent = new Intent(this, EditProfilePage.class);
+        intent.putExtra(EXTRA_EMAIL, getIntent().getStringExtra(EXTRA_EMAIL));
+        startActivity(intent);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.classroomannouncement;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -12,27 +13,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.classroomannouncement.Database.UserRepo;
+import com.example.classroomannouncement.Database.AppDatabase; // ✅ Added this import
 import com.example.classroomannouncement.Database.Entities.User;
+import com.example.classroomannouncement.viewmodels.UserViewModel;
 
-/**
- * This is the Login screen.
- * Users type email and password to log in.
- */
 public class MainActivity extends AppCompatActivity {
 
-    // Boxes for typing email and password
     private EditText emailEditText, passwordEditText;
-
-    // Button for login
     private Button loginButton;
-
-    // Text link to go to Signup screen
     private TextView goToSignupLink;
-
-    // Database helper class
-    private UserRepo userRepo;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,77 +32,89 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        // Makes the screen adjust for the top/bottom bars on newer devices
+        // ✅ Ensure admin account exists
+        AppDatabase.verifyAdminAccount(this);  // <--- KEY FIX
+
+        // Handle window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Connect the screen inputs to code
+        // Initialize ViewModel
+        Application application = (Application) getApplicationContext();
+        userViewModel = new ViewModelProvider(this,
+                ViewModelProvider.AndroidViewModelFactory.getInstance(application))
+                .get(UserViewModel.class);
+
+        initializeViews();
+        setupListeners();
+    }
+
+    private void initializeViews() {
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         loginButton = findViewById(R.id.loginButton);
         goToSignupLink = findViewById(R.id.goToSignupLink);
+    }
 
-        // Set up the helper to talk to the database
-        userRepo = new UserRepo(this);
+    private void setupListeners() {
+        loginButton.setOnClickListener(v -> attemptLogin());
+        goToSignupLink.setOnClickListener(v -> navigateToSignup());
+    }
 
-        /**
-         * When Login button is clicked:
-         * 1. Get the typed email and password
-         * 2. Check if either is empty
-         * 3. Ask the database if a user exists
-         * 4. If found, go to the correct screen (admin or student)
-         * 5. If not found, show error
-         */
-        loginButton.setOnClickListener(v -> {
-            // Step 1: Get email and password from input boxes
-            String email = emailEditText.getText().toString().trim();
-            String password = passwordEditText.getText().toString().trim();
+    private void attemptLogin() {
+        String email = emailEditText.getText().toString().trim().toLowerCase();
+        String password = passwordEditText.getText().toString().trim();
 
-            // Step 2: Make sure user filled both boxes
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        if (!validateInputs(email, password)) return;
 
-            // Step 3: Ask the database if this user exists
-            User user = userRepo.loginUser(email, password);
+        loginButton.setEnabled(false);
 
-            if (user != null) {
-                // Step 4: Login worked
-                Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
-
-                Intent intent;
-
-                if (user.isAdmin) {
-                    // Admins go to LandingPage
-                    intent = new Intent(MainActivity.this, LandingPage.class);
-                    intent.putExtra("isAdmin", true);
-                    intent.putExtra("roleLabel", "Admin");
-                } else {
-                    // Regular users go to StudentHomePage
-                    intent = new Intent(MainActivity.this, StudentHomePage.class);
-                    intent.putExtra("isAdmin", false);
-                    intent.putExtra("roleLabel", "Student");
-                }
-
-                // Step 5: Start the new screen
-                startActivity(intent);
-
+        userViewModel.getUserByEmailLive(email).observe(this, user -> {
+            if (user != null && user.getPassword().equals(password)) {
+                handleSuccessfulLogin(user);
             } else {
-                // Step 6: Login failed
-                Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+                handleLoginFailure(user == null ? "User not found" : "Invalid password");
             }
         });
+    }
 
-        /**
-         * If user clicks the sign-up text:
-         * Take them to the Signup screen.
-         */
-        goToSignupLink.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, SignupPage.class));
-        });
+    private boolean validateInputs(String email, String password) {
+        if (email.isEmpty() || password.isEmpty()) {
+            showToast("Please fill all fields");
+            return false;
+        }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            showToast("Please enter a valid email");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void handleSuccessfulLogin(User user) {
+        Class<?> destination = user.isAdmin() ? LandingPage.class : StudentHomePage.class;
+        Intent intent = new Intent(this, destination);
+        intent.putExtra("user_email", user.getEmail());
+        intent.putExtra("roleLabel", user.isAdmin() ? "Admin" : "Student");
+        startActivity(intent);
+        finish();
+    }
+
+    private void handleLoginFailure(String error) {
+        showToast(error);
+        loginButton.setEnabled(true);
+    }
+
+    private void navigateToSignup() {
+        startActivity(new Intent(this, SignupPage.class));
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }
