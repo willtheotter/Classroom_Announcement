@@ -1,6 +1,5 @@
 package com.example.classroomannouncement;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,23 +15,8 @@ public class SystemSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_settings);
 
-        // Setup navigation buttons
-        Button adminDashboardButton = findViewById(R.id.adminDashboardButton);
-        Button systemSettingsButton = findViewById(R.id.systemSettingsButton);
-
-        // Set button states - current activity should be highlighted/disabled
-        systemSettingsButton.setEnabled(false);
-        adminDashboardButton.setEnabled(true);
-
-        // Navigation handlers
-        adminDashboardButton.setOnClickListener(v -> {
-            startActivity(new Intent(this, AdminDashboardActivity.class));
-            finish();
-        });
-
-        systemSettingsButton.setOnClickListener(v -> {
-            // Already in SystemSettings, no action needed
-        });
+        // Setup toolbar
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
 
         // Initialize ViewModel
         settingsViewModel = new ViewModelProvider(this).get(SystemSettingsViewModel.class);
@@ -42,7 +26,7 @@ public class SystemSettingsActivity extends AppCompatActivity {
         EditText maxUsers = findViewById(R.id.maxUsers);
         Button saveButton = findViewById(R.id.saveSettingsButton);
 
-        // Load current settings
+        // Load current settings - CHANGED TO USE UNDERSCORE GETTERS
         settingsViewModel.getSystemSettings().observe(this, settings -> {
             if (settings != null) {
                 announcementDuration.setText(String.valueOf(settings.getAnnouncement_duration()));

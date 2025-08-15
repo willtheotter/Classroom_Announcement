@@ -6,4 +6,9 @@
     <string name="logged_in_as">Logged in as: %s</string>
     <string name="default_student_name">Student</string>
     <string name="default_role">Student</string>
+    <string name="manage_users">Manage Users</string>
+    <string name="create_announcement">Create Announcement</string>
+    <string name="system_settings">System Settings</string>
+    <string name="logout">Logout</string>
+    <string name="back">Back to Main</string>
 </resources>

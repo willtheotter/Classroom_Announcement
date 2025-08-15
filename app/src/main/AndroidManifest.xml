@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,7 +16,7 @@
         android:theme="@style/Theme.ClassroomAnnouncement"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <!-- Existing Activities -->
+        <!-- Launcher / Main Entry Point -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -25,6 +26,7 @@
             </intent-filter>
         </activity>
 
+        <!-- Core Pages -->
         <activity
             android:name=".LandingPage"
             android:exported="false"
@@ -36,26 +38,21 @@
             android:parentActivityName=".LandingPage" />
 
         <activity
-            android:name=".SignupPage"
-            android:exported="false"
-            android:parentActivityName=".MainActivity" />
-
-        <activity
             android:name=".CreateAnnouncementPage"
             android:exported="false"
             android:parentActivityName=".LandingPage" />
 
         <activity
-            android:name=".SettingsPage"
+            android:name=".SignupPage"
             android:exported="false"
-            android:parentActivityName=".LandingPage" />
+            android:parentActivityName=".MainActivity" />
 
         <activity
             android:name=".StudentHomePage"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
 
-        <!-- New Admin Activities -->
+        <!-- Admin Activities -->
         <activity
             android:name=".AdminDashboardActivity"
             android:exported="false"
@@ -80,7 +77,6 @@
             android:label="Analytics"
             android:parentActivityName=".AdminDashboardActivity" />
 
-        <!-- Services (if any) would go here -->
-
     </application>
+
 </manifest>

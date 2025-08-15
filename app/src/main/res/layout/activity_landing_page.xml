@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -8,39 +7,18 @@
     android:orientation="vertical"
     android:background="@drawable/radial_gradient">
 
-    <!-- Header with profile and settings icons -->
-    <RelativeLayout
+    <!-- Header with Toolbar and Back Arrow -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#003366"
-        android:elevation="8dp">
+        app:titleTextColor="@android:color/white"
+        app:title="Classroom Announcements"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationContentDescription="@string/back"/>
 
-        <ImageButton
-            android:id="@+id/editProfileButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_edit_profile"
-            android:contentDescription="@string/edit_profile"
-            android:tint="@android:color/white"/>
-
-        <ImageButton
-            android:id="@+id/settingsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_settings"
-            android:contentDescription="@string/settings"
-            android:tint="@android:color/white"/>
-    </RelativeLayout>
-
-    <!-- Welcome Section with white card background -->
+    <!-- Welcome Section -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,26 +35,26 @@
             android:padding="24dp">
 
             <TextView
-                android:id="@+id/adminWelcomeText"
+                android:id="@+id/welcomeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome Admin!"
+                android:text="Welcome Admin!!!"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="#001a33"/>
+                android:textColor="#001a33" />
 
             <TextView
                 android:id="@+id/roleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Logged in as: Admin"
+                android:text="Logged in as System Administrator"
                 android:textSize="18sp"
                 android:textColor="#80001a33"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Announcements List with white background -->
+    <!-- Announcements List -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -92,36 +70,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:padding="8dp"/>
+            android:padding="8dp" />
     </androidx.cardview.widget.CardView>
 
-    <!-- Floating Action Buttons -->
-    <FrameLayout
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/adminDashboardButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_admin"
-            android:contentDescription="Admin Dashboard"
-            android:backgroundTint="#003366"
-            android:tint="@android:color/white"
-            android:visibility="gone"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/goToCreateAnnouncementButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_add"
-            android:contentDescription="Create Announcement"
-            android:backgroundTint="#a0d9ef"
-            android:tint="@android:color/white"
-            android:visibility="gone"/>
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:itemIconTint="#000000"
+        app:itemTextColor="#000000"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu" />
 </LinearLayout>

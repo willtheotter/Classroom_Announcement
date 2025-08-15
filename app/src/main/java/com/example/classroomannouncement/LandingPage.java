@@ -2,7 +2,9 @@ package com.example.classroomannouncement;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -15,7 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.classroomannouncement.adapters.AnnouncementAdapter;
 import com.example.classroomannouncement.Database.Entities.Announcement;
 import com.example.classroomannouncement.viewmodels.AnnouncementViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
@@ -24,8 +27,7 @@ public class LandingPage extends AppCompatActivity {
     private AnnouncementViewModel announcementViewModel;
     private AnnouncementAdapter announcementAdapter;
     private boolean isAdmin;
-    private FloatingActionButton createAnnouncementButton;
-    private FloatingActionButton adminDashboardButton;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,8 @@ public class LandingPage extends AppCompatActivity {
         // Initialize UI and ViewModel
         initializeComponents();
         setupRecyclerView();
-        setupClickListeners();
+        setupNavigationListeners();
+        setupToolbarNavigation();  // Added for back arrow navigation
         updateAdminUI();
     }
 
@@ -60,8 +63,7 @@ public class LandingPage extends AppCompatActivity {
 
     private void initializeComponents() {
         isAdmin = getIntent().getBooleanExtra("isAdmin", false);
-        createAnnouncementButton = findViewById(R.id.goToCreateAnnouncementButton);
-        adminDashboardButton = findViewById(R.id.adminDashboardButton);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         announcementViewModel = new ViewModelProvider(this).get(AnnouncementViewModel.class);
     }
 
@@ -76,7 +78,21 @@ public class LandingPage extends AppCompatActivity {
         });
     }
 
-    private void setupClickListeners() {
+    private void setupToolbarNavigation() {
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+            // Navigate back to MainActivity
+            Intent intent = new Intent(LandingPage.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+
+            // Add slide animation
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        });
+    }
+
+    private void setupNavigationListeners() {
         // Announcement item click listener
         announcementAdapter.setOnItemClickListener(new AnnouncementAdapter.OnItemClickListener() {
             @Override
@@ -92,12 +108,23 @@ public class LandingPage extends AppCompatActivity {
             }
         });
 
-        // FAB click listeners
-        createAnnouncementButton.setOnClickListener(v ->
-                startActivity(new Intent(LandingPage.this, CreateAnnouncementPage.class)));
+        // Bottom navigation click listener
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
 
-        adminDashboardButton.setOnClickListener(v ->
-                startActivity(new Intent(LandingPage.this, AdminDashboardActivity.class)));
+            if (id == R.id.nav_home) {
+                // Already on home, do nothing or refresh
+                return true;
+            } else if (id == R.id.nav_create) {
+                startActivity(new Intent(LandingPage.this, CreateAnnouncementPage.class));
+                return true;
+            } else if (id == R.id.nav_dashboard) {
+                startActivity(new Intent(LandingPage.this, AdminDashboardActivity.class));
+                return true;
+            }
+
+            return false;
+        });
     }
 
     private void navigateToViewAnnouncement(Announcement announcement) {
@@ -108,8 +135,10 @@ public class LandingPage extends AppCompatActivity {
     }
 
     private void updateAdminUI() {
-        int adminVisibility = isAdmin ? View.VISIBLE : View.GONE;
-        createAnnouncementButton.setVisibility(adminVisibility);
-        adminDashboardButton.setVisibility(adminVisibility);
+        if (bottomNavigationView != null) {
+            Menu menu = bottomNavigationView.getMenu();
+            menu.findItem(R.id.nav_create).setVisible(true);
+            menu.findItem(R.id.nav_dashboard).setVisible(true);
+        }
     }
 }
