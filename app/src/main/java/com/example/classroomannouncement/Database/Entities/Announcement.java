@@ -3,7 +3,9 @@ package com.example.classroomannouncement.Database.Entities;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
+
 import com.example.classroomannouncement.Database.Converters;
+
 import java.util.Date;
 
 @Entity(tableName = "announcements")
@@ -17,10 +19,17 @@ public class Announcement {
     @TypeConverters(Converters.class)
     private Date createdAt;
 
-    public Announcement(String title, String content) {
+    @TypeConverters(Converters.class)
+    private Date expiryTime;
+
+    private boolean isExpired;
+
+    public Announcement(String title, String content, Date expiryTime) {
         this.title = title;
         this.content = content;
         this.createdAt = new Date(); // Sets to current time by default
+        this.expiryTime = expiryTime;
+        this.isExpired = false; // Default to not expired
     }
 
     // Getters and Setters
@@ -54,6 +63,22 @@ public class Announcement {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(Date expiryTime) {
+        this.expiryTime = expiryTime;
+    }
+
+    public boolean isExpired() {
+        return isExpired;
+    }
+
+    public void setExpired(boolean expired) {
+        isExpired = expired;
     }
 
     // Helper method for formatted date display

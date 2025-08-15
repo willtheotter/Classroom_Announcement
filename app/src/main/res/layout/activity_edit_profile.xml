@@ -50,7 +50,49 @@
             android:padding="16dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Password Input -->
+    <!-- Current Password Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="#003366"
+        app:hintTextColor="#80003666"
+        app:boxBackgroundColor="@android:color/white">
+
+        <EditText
+            android:id="@+id/currentPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Current Password"
+            android:textColor="#001a33"
+            android:textSize="16sp"
+            android:inputType="textPassword"
+            android:padding="16dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- New Password Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="#003366"
+        app:hintTextColor="#80003666"
+        app:boxBackgroundColor="@android:color/white">
+
+        <EditText
+            android:id="@+id/newPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="New Password"
+            android:textColor="#001a33"
+            android:textSize="16sp"
+            android:inputType="textPassword"
+            android:padding="16dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Confirm New Password Input -->
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
@@ -61,10 +103,10 @@
         app:boxBackgroundColor="@android:color/white">
 
         <EditText
-            android:id="@+id/passwordEditText"
+            android:id="@+id/confirmPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="Confirm New Password"
             android:textColor="#001a33"
             android:textSize="16sp"
             android:inputType="textPassword"
