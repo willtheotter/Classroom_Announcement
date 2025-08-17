@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,52 +16,54 @@
         android:theme="@style/Theme.ClassroomAnnouncement"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <!-- Existing Activities -->
+        <!-- Launcher Activity -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".LoginPage"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <!-- Core Pages -->
         <activity
-            android:name=".LandingPage"
+            android:name=".AdminLandingPage"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".LoginPage" />
 
         <activity
-            android:name=".ViewAnnouncementPage"
+            android:name=".AdminViewAnnouncementPage"
+            android:exported="false"
+            android:parentActivityName=".AdminLandingPage" />
+
+        <activity
+            android:name=".ViewAnnouncementActivity"
             android:exported="false"
             android:parentActivityName=".LandingPage" />
-
-        <activity
-            android:name=".SignupPage"
-            android:exported="false"
-            android:parentActivityName=".MainActivity" />
 
         <activity
             android:name=".CreateAnnouncementPage"
             android:exported="false"
-            android:parentActivityName=".LandingPage" />
+            android:parentActivityName=".AdminLandingPage" />
 
         <activity
-            android:name=".SettingsPage"
+            android:name=".SignupPage"
             android:exported="false"
-            android:parentActivityName=".LandingPage" />
+            android:parentActivityName=".LoginPage" />
 
         <activity
-            android:name=".StudentHomePage"
+            android:name=".LandingPage"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".LoginPage" />
 
-        <!-- New Admin Activities -->
+        <!-- Admin Activities -->
         <activity
             android:name=".AdminDashboardActivity"
             android:exported="false"
             android:label="Admin Dashboard"
-            android:parentActivityName=".LandingPage" />
+            android:parentActivityName=".AdminLandingPage" />
 
         <activity
             android:name=".ManageUsersActivity"
@@ -80,7 +83,50 @@
             android:label="Analytics"
             android:parentActivityName=".AdminDashboardActivity" />
 
-        <!-- Services (if any) would go here -->
+        <!-- Product Management Activities -->
+        <activity
+            android:name=".AdminProductListActivity"
+            android:exported="false"
+            android:label="Product Management"
+            android:parentActivityName=".AdminDashboardActivity" />
 
+        <activity
+            android:name=".AddEditProductActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_edit_product"
+            android:parentActivityName=".AdminProductListActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible" />
+
+        <activity
+            android:name=".AdminProductDetailActivity"
+            android:exported="false"
+            android:label="Product Details"
+            android:parentActivityName=".AdminProductListActivity" />
+
+        <activity
+            android:name=".UserDashboardActivity"
+            android:label="User Dashboard"
+            android:exported="false" />
+
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ProductListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ProductDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ViewUsersActivity"
+            android:exported="false" />
     </application>
+
 </manifest>

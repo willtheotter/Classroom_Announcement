@@ -1,6 +1,5 @@
 package com.example.classroomannouncement;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,23 +15,8 @@ public class SystemSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_settings);
 
-        // Setup navigation buttons
-        Button adminDashboardButton = findViewById(R.id.adminDashboardButton);
-        Button systemSettingsButton = findViewById(R.id.systemSettingsButton);
-
-        // Set button states - current activity should be highlighted/disabled
-        systemSettingsButton.setEnabled(false);
-        adminDashboardButton.setEnabled(true);
-
-        // Navigation handlers
-        adminDashboardButton.setOnClickListener(v -> {
-            startActivity(new Intent(this, AdminDashboardActivity.class));
-            finish();
-        });
-
-        systemSettingsButton.setOnClickListener(v -> {
-            // Already in SystemSettings, no action needed
-        });
+        // Setup toolbar
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
 
         // Initialize ViewModel
         settingsViewModel = new ViewModelProvider(this).get(SystemSettingsViewModel.class);
@@ -42,11 +26,11 @@ public class SystemSettingsActivity extends AppCompatActivity {
         EditText maxUsers = findViewById(R.id.maxUsers);
         Button saveButton = findViewById(R.id.saveSettingsButton);
 
-        // Load current settings
+        // Load current settings - using proper getter methods
         settingsViewModel.getSystemSettings().observe(this, settings -> {
             if (settings != null) {
-                announcementDuration.setText(String.valueOf(settings.getAnnouncement_duration()));
-                maxUsers.setText(String.valueOf(settings.getMax_users()));
+                announcementDuration.setText(String.valueOf(settings.getAnnouncementDuration()));
+                maxUsers.setText(String.valueOf(settings.getMaxUsers()));
             }
         });
 
@@ -55,10 +39,16 @@ public class SystemSettingsActivity extends AppCompatActivity {
             try {
                 int duration = Integer.parseInt(announcementDuration.getText().toString());
                 int users = Integer.parseInt(maxUsers.getText().toString());
+
                 settingsViewModel.updateSettings(duration, users);
                 finish();
             } catch (NumberFormatException e) {
-                announcementDuration.setError("Invalid number");
+                if (announcementDuration.getText().toString().isEmpty()) {
+                    announcementDuration.setError("Required field");
+                }
+                if (maxUsers.getText().toString().isEmpty()) {
+                    maxUsers.setError("Required field");
+                }
             }
         });
     }

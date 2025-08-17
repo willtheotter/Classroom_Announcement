@@ -1,21 +1,18 @@
-package com.example.classroomannouncement.adapters;  // Make sure this matches your actual package name
+package com.example.classroomannouncement.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.classroomannouncement.Database.Entities.User;
-import com.example.classroomannouncement.R;  // Make sure this import matches your app's package
-
+import com.example.classroomannouncement.R;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
@@ -31,11 +28,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         public TextView userEmail;
         public TextView userRole;
 
-        public UserViewHolder(View itemView) {
+        public UserViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
             userName = itemView.findViewById(R.id.userName);
             userEmail = itemView.findViewById(R.id.userEmail);
             userRole = itemView.findViewById(R.id.userRole);
+
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick((User) itemView.getTag());
+                }
+            });
         }
     }
 
@@ -44,8 +48,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     }
 
     public void setUsers(List<User> users) {
-        this.users = users;
-        notifyDataSetChanged();
+        if (users != null) {
+            this.users = users;
+            notifyDataSetChanged();
+        }
     }
 
     @NonNull
@@ -53,21 +59,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_user, parent, false);
-        return new UserViewHolder(itemView);
+        return new UserViewHolder(itemView, listener);
     }
 
     @Override
-    public void onBindViewHolder(UserViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User currentUser = users.get(position);
-        holder.userName.setText(currentUser.getName());
-        holder.userEmail.setText(currentUser.getEmail());
+        holder.userName.setText(currentUser.getName() != null ? currentUser.getName() : "No Name");
+        holder.userEmail.setText(currentUser.getEmail() != null ? currentUser.getEmail() : "No Email");
         holder.userRole.setText(currentUser.isAdmin() ? "Admin" : "User");
-
-        holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onItemClick(currentUser);
-            }
-        });
+        holder.itemView.setTag(currentUser); // Store user object in view tag
     }
 
     @Override

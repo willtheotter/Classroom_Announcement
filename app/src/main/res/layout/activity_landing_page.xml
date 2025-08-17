@@ -1,66 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/radial_gradient">
+    android:background="@drawable/radial_gradient"
+    android:fitsSystemWindows="true">
 
-    <!-- Header with profile and settings icons -->
-    <RelativeLayout
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#003366"
-        android:elevation="8dp">
+        app:titleTextColor="@android:color/white"
+        app:title="Classroom Announcements"
+        app:navigationIcon="@drawable/ic_arrow_back"/>
 
-        <ImageButton
-            android:id="@+id/editProfileButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_edit_profile"
-            android:contentDescription="@string/edit_profile"
-            android:tint="@android:color/white"/>
-
-        <ImageButton
-            android:id="@+id/settingsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_settings"
-            android:contentDescription="@string/settings"
-            android:tint="@android:color/white"/>
-    </RelativeLayout>
-
-    <!-- Welcome Section with white card background -->
+    <!-- Welcome Card -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="@android:color/white">
+        app:cardElevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center"
-            android:padding="24dp">
+            android:padding="24dp"
+            android:gravity="center">
 
             <TextView
-                android:id="@+id/adminWelcomeText"
+                android:id="@+id/welcomeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome Admin!"
+                android:text="Welcome"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="#001a33"/>
@@ -69,14 +46,14 @@
                 android:id="@+id/roleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Logged in as: Admin"
+                android:text="Logged in as Student"
                 android:textSize="18sp"
                 android:textColor="#80001a33"
                 android:layout_marginTop="8dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Announcements List with white background -->
+    <!-- Announcements List -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -84,8 +61,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
         app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="@android:color/white">
+        app:cardElevation="4dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/announcementsRecyclerView"
@@ -95,33 +71,14 @@
             android:padding="8dp"/>
     </androidx.cardview.widget.CardView>
 
-    <!-- Floating Action Buttons -->
-    <FrameLayout
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/adminDashboardButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_admin"
-            android:contentDescription="Admin Dashboard"
-            android:backgroundTint="#003366"
-            android:tint="@android:color/white"
-            android:visibility="gone"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/goToCreateAnnouncementButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_add"
-            android:contentDescription="Create Announcement"
-            android:backgroundTint="#a0d9ef"
-            android:tint="@android:color/white"
-            android:visibility="gone"/>
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:menu="@menu/bottom_nav_menu_student"
+        app:itemIconTint="#000000"
+        app:itemTextColor="#000000"
+        app:labelVisibilityMode="labeled"/>
 </LinearLayout>

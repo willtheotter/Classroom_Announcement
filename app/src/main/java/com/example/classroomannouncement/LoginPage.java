@@ -1,7 +1,7 @@
 package com.example.classroomannouncement;
 
-import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,25 +15,31 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.classroomannouncement.Database.AppDatabase; // ✅ Added this import
+import com.example.classroomannouncement.Database.AppDatabase;
 import com.example.classroomannouncement.Database.Entities.User;
 import com.example.classroomannouncement.viewmodels.UserViewModel;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginPage extends AppCompatActivity {
 
+    // UI Components
     private EditText emailEditText, passwordEditText;
     private Button loginButton;
     private TextView goToSignupLink;
     private UserViewModel userViewModel;
 
+    // Constants
+    public static final String EXTRA_NAME = "USER_NAME";
+    public static final String EXTRA_EMAIL = "USER_EMAIL";
+    public static final String EXTRA_IS_ADMIN = "IS_ADMIN";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login_page);
 
-        // ✅ Ensure admin account exists
-        AppDatabase.verifyAdminAccount(this);  // <--- KEY FIX
+        // Ensure admin account exists
+        AppDatabase.verifyAdminAccount(this);
 
         // Handle window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -43,10 +49,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Initialize ViewModel
-        Application application = (Application) getApplicationContext();
-        userViewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(application))
-                .get(UserViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         initializeViews();
         setupListeners();
@@ -96,12 +99,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleSuccessfulLogin(User user) {
-        Class<?> destination = user.isAdmin() ? LandingPage.class : StudentHomePage.class;
+        // Determine destination based on admin status
+        Class<?> destination = user.isAdmin() ? AdminLandingPage.class : LandingPage.class;
+
+        // Create intent with user data
         Intent intent = new Intent(this, destination);
-        intent.putExtra("user_email", user.getEmail());
-        intent.putExtra("roleLabel", user.isAdmin() ? "Admin" : "Student");
+        intent.putExtra(EXTRA_NAME, user.getName());
+        intent.putExtra(EXTRA_EMAIL, user.getEmail());
+        intent.putExtra(EXTRA_IS_ADMIN, user.isAdmin());
+
+        // Save to SharedPreferences
+        saveUserToPrefs(user.getName(), user.getEmail(), user.isAdmin());
+
         startActivity(intent);
         finish();
+    }
+
+    private void saveUserToPrefs(String name, String email, boolean isAdmin) {
+        getSharedPreferences("UserPrefs", MODE_PRIVATE).edit()
+                .putString(EXTRA_NAME, name)
+                .putString(EXTRA_EMAIL, email)
+                .putBoolean(EXTRA_IS_ADMIN, isAdmin)
+                .apply();
     }
 
     private void handleLoginFailure(String error) {

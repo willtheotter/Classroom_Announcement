@@ -7,14 +7,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/radial_gradient"
-    tools:context=".MainActivity">
+    tools:context=".LoginPage">
 
     <!-- Title -->
     <TextView
         android:id="@+id/titleText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Classroom Announcements"
+        android:text="THE TEAM APP"
         android:textSize="36sp"
         android:textStyle="bold"
         android:textColor="#003366"
