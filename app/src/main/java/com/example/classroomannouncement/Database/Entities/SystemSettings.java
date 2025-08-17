@@ -1,33 +1,48 @@
 package com.example.classroomannouncement.Database.Entities;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "system_settings")
 public class SystemSettings {
     @PrimaryKey
+    @ColumnInfo(defaultValue = "1")
     private int id = 1;
 
-    private int announcement_duration;
-    private int max_users;
+    @ColumnInfo(name = "announcement_duration", defaultValue = "7")
+    private int announcementDuration;
 
-    // Getters and setters
+    @ColumnInfo(name = "max_users", defaultValue = "100")
+    private int maxUsers;
+
+    @ColumnInfo(name = "message_retention_days", defaultValue = "30")
+    private int messageRetentionDays = 30;
+
+    @ColumnInfo(name = "max_products", defaultValue = "500")
+    private int maxProducts = 500;
+
+    // Standard getters and setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-    public int getAnnouncement_duration() {
-        return announcement_duration;
+    public int getAnnouncementDuration() { return announcementDuration; }
+    public void setAnnouncementDuration(int announcementDuration) {
+        this.announcementDuration = announcementDuration;
     }
 
-    public void setAnnouncement_duration(int duration) {
-        this.announcement_duration = duration;
+    public int getMaxUsers() { return maxUsers; }
+    public void setMaxUsers(int maxUsers) {
+        this.maxUsers = maxUsers;
     }
 
-    public int getMax_users() {
-        return max_users;
+    public int getMessageRetentionDays() { return messageRetentionDays; }
+    public void setMessageRetentionDays(int messageRetentionDays) {
+        this.messageRetentionDays = messageRetentionDays;
     }
 
-    public void setMax_users(int maxUsers) {
-        this.max_users = maxUsers;
+    public int getMaxProducts() { return maxProducts; }
+    public void setMaxProducts(int maxProducts) {
+        this.maxProducts = maxProducts;
     }
 }

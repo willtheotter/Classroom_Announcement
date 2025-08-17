@@ -23,7 +23,7 @@ import retrofit2.Response;
 
 import java.util.List;
 
-public class ViewAnnouncementPage extends AppCompatActivity {
+public class AdminViewAnnouncementPage extends AppCompatActivity {
 
     private AnnouncementViewModel announcementViewModel;
     private MaterialToolbar toolbar;
@@ -31,12 +31,12 @@ public class ViewAnnouncementPage extends AppCompatActivity {
     private TextView inspirationalQuote;
     private int currentAnnouncementId;
     private boolean isAdmin;
-    private static final String TAG = "ViewAnnouncementPage";
+    private static final String TAG = "ViewAnnouncementPage.java";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_announcement_page);
+        setContentView(R.layout.activity_admin_view_announcement);
 
         // Get user role from intent
         isAdmin = getIntent().getBooleanExtra("isAdmin", false);
@@ -115,14 +115,14 @@ public class ViewAnnouncementPage extends AppCompatActivity {
                     inspirationalQuote.setVisibility(View.VISIBLE);
                 } else {
                     // if api call fails show a toast, proves we're at least trying to retrieve in case API is down :)
-                    Toast.makeText(ViewAnnouncementPage.this, "Retrieval from quote API failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminViewAnnouncementPage.this, "Retrieval from quote API failed", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<ZenQuoteResponse>> call, @NonNull Throwable t) {
                 // network failure, show same toast
-                Toast.makeText(ViewAnnouncementPage.this, "Retrieval from quote API failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminViewAnnouncementPage.this, "Retrieval from quote API failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -152,7 +152,7 @@ public class ViewAnnouncementPage extends AppCompatActivity {
     }
 
     public static Intent newIntent(android.content.Context context, int announcementId, boolean isAdmin) {
-        Intent intent = new Intent(context, ViewAnnouncementPage.class);
+        Intent intent = new Intent(context, AdminViewAnnouncementPage.class);
         intent.putExtra("announcement_id", announcementId);
         intent.putExtra("isAdmin", isAdmin);
         return intent;

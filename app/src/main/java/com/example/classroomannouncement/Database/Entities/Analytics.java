@@ -13,6 +13,9 @@ public class Analytics {
     @ColumnInfo(name = "eventType")
     private String eventType;
 
+    @ColumnInfo(name = "viewCount", defaultValue = "0")
+    private int viewCount;
+
     @ColumnInfo(name = "details")
     private String details;
 
@@ -22,57 +25,50 @@ public class Analytics {
     @ColumnInfo(name = "userId")
     private Integer userId;
 
-    // No-arg constructor required by Room
-    public Analytics() {
-    }
+    @ColumnInfo(name = "productId")
+    private Integer productId;
 
-    // Parameterized constructor marked with @Ignore
+    @ColumnInfo(name = "productName")
+    private String productName;
+
+    // Constructors
+    public Analytics() {}
+
     @Ignore
-    public Analytics(String eventType, String details, long timestamp, Integer userId) {
+    public Analytics(String eventType, int viewCount, String details,
+                     long timestamp, Integer userId, Integer productId,
+                     String productName) {
         this.eventType = eventType;
+        this.viewCount = viewCount;
         this.details = details;
         this.timestamp = timestamp;
         this.userId = userId;
+        this.productId = productId;
+        this.productName = productName;
     }
 
     // Getters and Setters
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getEventType() { return eventType; }
+    public void setEventType(String eventType) { this.eventType = eventType; }
 
-    public String getEventType() {
-        return eventType;
-    }
+    public int getViewCount() { return viewCount; }
+    public void setViewCount(int viewCount) { this.viewCount = viewCount; }
 
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
+    public String getDetails() { return details; }
+    public void setDetails(String details) { this.details = details; }
 
-    public String getDetails() {
-        return details;
-    }
+    public long getTimestamp() { return timestamp; }
+    public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
 
-    public void setDetails(String details) {
-        this.details = details;
-    }
+    public Integer getUserId() { return userId; }
+    public void setUserId(Integer userId) { this.userId = userId; }
 
-    public long getTimestamp() {
-        return timestamp;
-    }
+    public Integer getProductId() { return productId; }
+    public void setProductId(Integer productId) { this.productId = productId; }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+    public String getProductName() { return productName; }
+    public void setProductName(String productName) { this.productName = productName; }
 }
